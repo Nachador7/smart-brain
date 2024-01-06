@@ -3,7 +3,9 @@ import Navigation from './Components/Navigation/Navigation';
 import Logo from './Components/Logo/Logo';
 import ImageLinkForm from './Components/ImageLinkForm/ImageLinkForm';
 import Rank from './Components/Rank/Rank';
+import Signin from './Components/Signin/Signin';
 import FaceRecognition from './Components/FaceRecognition/FaceRecognition';
+import Register from './Components/Register/Register';
 import './App.css';
 
 const returnClarifaiJSONRequest = (imageUrl) => {
@@ -46,6 +48,8 @@ class App extends Component {
       input: "",
       imageUrl: "",
       box: {},
+      route: "signin",
+      isSignedIn: false,
     }
   }
 
@@ -88,18 +92,42 @@ class App extends Component {
     .catch(error => console.log('error', error));
   }
 
+  onRouteChange = (route) => {
+    if (route === "signout") {
+      this.setState({isSignedIn: false})
+    } else if (route === "home") {
+      this.setState({isSignedIn: true})
+    }
+    this.setState({route: route})
+  }
+
   render() {
+    const { isSignedIn, imageUrl, route, box } = this.state;
     return (
       <div className="App">
-        <Navigation />
-        <Logo />
-        <Rank />
-        <ImageLinkForm 
-        onInputChange={this.onInputChange}
-        onButtonSubmit={this.onButtonSubmit} />
-        <FaceRecognition
-        imageUrl={this.state.imageUrl}
-        box={this.state.box} />
+        <Navigation
+        isSignedIn={isSignedIn}
+        onRouteChange={this.onRouteChange} />
+        { route === "home"
+         ? <div>
+          <Logo />
+          <Rank />
+         <ImageLinkForm
+          onInputChange={this.onInputChange}
+          onButtonSubmit={this.onButtonSubmit} 
+          />
+          <FaceRecognition
+            imageUrl={imageUrl}
+            box={box} /></div>
+            :(
+              route === "signin"
+             ? <Signin onRouteChange={this.onRouteChange}/>
+              : <Register onRouteChange={this.onRouteChange}/>
+            
+            )
+           
+            
+  }
       </div>
     );
   }
