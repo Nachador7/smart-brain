@@ -76,20 +76,25 @@ class App extends Component {
 
   onButtonSubmit = () => {
     const { input } = this.state;
-    this.setState({imageUrl: input});
+    this.setState({imageUrl: input,});
     fetch("https://api.clarifai.com/v2/models/face-detection/outputs", returnClarifaiJSONRequest(input))
     .then(response => response.json())
     .then(result => {
-
+        
+  
         const regions = result.outputs[0].data.regions;
-
+  
         regions.forEach(region => {
           const faceLocation = this.calculateFaceLocation(region.region_info.bounding_box);
           this.displayFaceBox(faceLocation);
       });
-
+  
     })
-    .catch(error => console.log('error', error));
+    .catch(error => {
+      
+      alert('Error: The API is not responding. Please try again later.');
+      console.log('error', error);
+    });
   }
 
   onRouteChange = (route) => {
@@ -108,6 +113,7 @@ class App extends Component {
         <Navigation
         isSignedIn={isSignedIn}
         onRouteChange={this.onRouteChange} />
+        
         { route === "home"
          ? <div>
           <Logo />
