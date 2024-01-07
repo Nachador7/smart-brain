@@ -16,7 +16,6 @@ class Signin extends React.Component {
   }
 
   onSubmitSignIn = () => {
-    // console.log(this.state);
     fetch('http://localhost:3000/signin', {
       method: 'post',
       headers: {'Content-Type': 'application/json'},
@@ -26,16 +25,18 @@ class Signin extends React.Component {
       })
     })
     .then(response => response.json())
-    .then(user => {
-      if(user.id){ 
-        this.props.loadUser(user);
+    .then(data => {
+      if(data === 'wrong credentials' || data === 'email not found') {
+        alert("wrong credentials");
+      } else if(data.id) {
+        this.props.loadUser(data);
         this.props.onRouteChange('home');
       }
     })
     .catch(error =>{
-      alert('Wrong credentials')
+      console.error('Error:', error);
     });
-  }
+}
   render() {
     return (
         <article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
