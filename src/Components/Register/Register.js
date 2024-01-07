@@ -30,13 +30,20 @@ class Register extends React.Component {
           name: this.state.name
         })
       })
-      .then(response => response.json())
-      .then(user => {
-        if (user) {
-          this.props.loadUser(user);
-          this.props.onRouteChange('home');
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('User with this email already exists');
         }
       })
+      .then(user => {
+        this.props.loadUser(user);
+        this.props.onRouteChange('home');
+      })
+      .catch(error => {
+        alert(error.message);
+      });
     }
 
     render() {
