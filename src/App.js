@@ -98,10 +98,21 @@ class App extends Component {
     fetch("https://api.clarifai.com/v2/models/face-detection/outputs", returnClarifaiJSONRequest(input))
     .then(response => response.json())
     .then(result => {
-        
-  
+      if (result){
+        fetch("http://localhost:3000/image", {
+          method: "put",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({
+            id: this.state.user.id
+          })
+        })
+        .then(response => response.json())
+        .then(count => {
+          console.log(count);
+          this.setState(Object.assign(this.state.user, {entries: count}))
+        })
+      }
         const regions = result.outputs[0].data.regions;
-  
         regions.forEach(region => {
           const faceLocation = this.calculateFaceLocation(region.region_info.bounding_box);
           this.displayFaceBox(faceLocation);
