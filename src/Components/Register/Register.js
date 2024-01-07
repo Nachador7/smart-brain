@@ -21,13 +21,55 @@ class Register extends React.Component {
     }
 
     onSubmitSignIn = () => {
+      const { email, name, password } = this.state;
+  if (!email || !name || !password) {
+    alert('All fields must be filled out.');
+    return;
+  } else if (name.length < 3) {
+    alert('Name must be at least 3 characters long.');
+    return;
+  } else if (name.length > 20 || name.includes(' ') || name.includes('.') || name.includes(',') || name.includes('!') || name.includes('?') || name.includes('*') || name.includes('+') || name.includes('-') || name.includes('/') || name.includes('\\') || name.includes('|') || name.includes('(') || name.includes(')') || name.includes('{') || name.includes('}') || name.includes('[') || name.includes(']') || name.includes('<') || name.includes('>') || name.includes('=') || name.includes('~') || name.includes('`') || name.includes(';') || name.includes(':') || name.includes('\'') || name.includes('"')) {
+    alert('Name must not contain any special characters or spaces.');
+    return;
+  } else if (name.includes('0') || name.includes('1') || name.includes('2') || name.includes('3') || name.includes('4') || name.includes('5') || name.includes('6') || name.includes('7') || name.includes('8') || name.includes('9')) {
+    alert('Name must not contain any numbers.');
+    return;
+  } else if (email.length < 3) {
+    alert('Email must be at least 3 characters long.');
+    return;
+  } else if (email.length > 254) {
+    alert('Email must not exceed 254 characters.');
+    return;
+  } else if (email.includes(' ')) {
+    alert('Email must not contain any spaces.');
+    return;
+  } else if (email.includes('..')) {
+    alert('Email must not contain consecutive periods.');
+    return;
+  } else if (email.includes('@.')) {
+    alert('Email must not contain a period immediately after an @ symbol.');
+    return;
+  } else if (email.includes('.@')) {
+    alert('Email must not contain an @ symbol immediately after a period.');
+    return;
+  } 
+   else if (!email.includes('@')) {
+    alert('Email must contain an @ symbol.');
+    return;
+  } else if (password.length < 8) {
+    alert('Password must be at least 8 characters long.');
+    return;
+  } else if (password.length > 100) {
+    alert('Password must not exceed 100 characters.');
+    return;
+  }
       fetch('http://localhost:3000/register', {
         method: 'post',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
-          email: this.state.email,
-          password: this.state.password,
-          name: this.state.name
+          email: email,
+          password: password,
+          name: name
         })
       })
       .then(response => {
