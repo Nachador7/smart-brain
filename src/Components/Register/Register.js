@@ -63,7 +63,7 @@ class Register extends React.Component {
     alert('Password must not exceed 100 characters.');
     return;
   }
-      fetch('http://localhost:3000/register', {
+      fetch('https://smart-brain-api-k158.onrender.com/register', {
         method: 'post',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
