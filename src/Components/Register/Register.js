@@ -96,8 +96,10 @@ class Register extends React.Component {
     }
 
     render() {
+      const { recaptchaValue } = this.state;
    
     return (
+
         <article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
       <main className="pa4 black-80">
         <div className="measure">
@@ -141,19 +143,21 @@ class Register extends React.Component {
             </div>
           </fieldset>
           <ReCAPTCHA
-              sitekey="6LfCYUkpAAAAAMA8rMl2HWqkGKLPGsn1A37EcdpW" // Replace with your reCAPTCHA site key
-              onChange={this.onRecaptchaChange}
-            />
-          <div className="">
-            <input
-              onClick={this.onSubmitSignIn}
-              className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
-              type="submit"
-              value="Register"
-            />
-          </div>
-        </div>
-      </main>
+                        sitekey="6LfCYUkpAAAAAMA8rMl2HWqkGKLPGsn1A37EcdpW" // Replace with your reCAPTCHA site key
+                        onChange={this.onRecaptchaChange}
+                    />
+                    {recaptchaValue && (
+                        <div className="">
+                            <input
+                                onClick={this.onSubmitSignIn}
+                                className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
+                                type="submit"
+                                value="Register"
+                            />
+                        </div>
+                    )}
+                </div>
+            </main>
       </article>
     );
   };
