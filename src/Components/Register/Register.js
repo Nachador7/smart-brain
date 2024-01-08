@@ -56,8 +56,8 @@ class Register extends React.Component {
    else if (!email.includes('@')) {
     alert('Email must contain an @ symbol.');
     return;
-  } else if (password.length < 8) {
-    alert('Password must be at least 8 characters long.');
+  } else if (password.length < 3) {
+    alert('Password must be at least 3 characters long.');
     return;
   } else if (password.length > 100) {
     alert('Password must not exceed 100 characters.');
