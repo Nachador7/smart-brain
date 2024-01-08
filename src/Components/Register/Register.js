@@ -141,7 +141,7 @@ class Register extends React.Component {
             </div>
           </fieldset>
           <ReCAPTCHA
-              sitekey="6LeTKkgpAAAAAEPWpsdK5Hou4gwyQYbpPiD4BIMI" // Replace with your reCAPTCHA site key
+              sitekey="6LfCYUkpAAAAAMA8rMl2HWqkGKLPGsn1A37EcdpW" // Replace with your reCAPTCHA site key
               onChange={this.onRecaptchaChange}
             />
           <div className="">
