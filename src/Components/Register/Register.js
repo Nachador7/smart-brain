@@ -1,4 +1,5 @@
 import React from "react";
+import ReCAPTCHA from "react-google-recaptcha";
 
 class Register extends React.Component {
   
@@ -7,7 +8,8 @@ class Register extends React.Component {
       this.state = {
         email: "",
         password: "",
-        name: ""
+        name: "",
+        recaptchaValue: null,
       }
     }
     onNameChange = (event) => {
@@ -19,6 +21,9 @@ class Register extends React.Component {
     onPasswordChange = (event) => {
       this.setState({password: event.target.value});
     }
+    onRecaptchaChange = (value) => {
+      this.setState({ recaptchaValue: value });
+    };
 
     onSubmitSignIn = () => {
       const { email, name, password } = this.state;
@@ -63,6 +68,8 @@ class Register extends React.Component {
     alert('Password must not exceed 100 characters.');
     return;
   }
+
+
       fetch('https://smart-brain-api-k158.onrender.com/register', {
         method: 'post',
         headers: {'Content-Type': 'application/json'},
@@ -133,6 +140,10 @@ class Register extends React.Component {
               />
             </div>
           </fieldset>
+          <ReCAPTCHA
+              sitekey="6LeTKkgpAAAAAEPWpsdK5Hou4gwyQYbpPiD4BIMI" // Replace with your reCAPTCHA site key
+              onChange={this.onRecaptchaChange}
+            />
           <div className="">
             <input
               onClick={this.onSubmitSignIn}
