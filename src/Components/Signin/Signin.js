@@ -1,11 +1,13 @@
 import React from "react";
+import "./Signin.css";
 
 class Signin extends React.Component {
   constructor(props){
     super();
     this.state = {
       signInEmail: "",
-      signInPassword: ""
+      signInPassword: "",
+      isLoading: false
     }
   }
   onEmailChange = (event) => {
@@ -16,6 +18,7 @@ class Signin extends React.Component {
   }
 
   onSubmitSignIn = () => {
+    this.setState({ isLoading: true });
     
     fetch('https://smart-brain-api-k158.onrender.com/signin', {
       method: 'post',
@@ -29,6 +32,7 @@ class Signin extends React.Component {
     .then(data => {
       if(data === 'wrong credentials' || data === 'email not found') {
         alert("wrong credentials");
+        this.setState({ isLoading: false });
       } else if(data.id) {
         this.props.loadUser(data);
         this.props.onRouteChange('home');
@@ -38,8 +42,14 @@ class Signin extends React.Component {
       console.error('Error:', error);
     });
 }
-  render() {
-    return (
+render() {
+  return (
+    <div>
+      {this.state.isLoading ? (
+        <div className="loader-container">
+        <div className="loader"></div>
+        </div>
+      ) : (
         <article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
       <main className="pa4 black-80">
         <div className="measure">
@@ -86,6 +96,8 @@ class Signin extends React.Component {
         </div>
       </main>
       </article>
+      )}
+      </div>
     );
   };
 }
