@@ -1,5 +1,5 @@
 import React from "react";
-import ReCAPTCHA from "react-google-recaptcha";
+import "./Register.css";
 
 class Register extends React.Component {
   
@@ -9,7 +9,7 @@ class Register extends React.Component {
         email: "",
         password: "",
         name: "",
-        recaptchaValue: null,
+        isLoading: false,
       }
     }
     onNameChange = (event) => {
@@ -21,55 +21,16 @@ class Register extends React.Component {
     onPasswordChange = (event) => {
       this.setState({password: event.target.value});
     }
-    onRecaptchaChange = (value) => {
-      this.setState({ recaptchaValue: value });
-    };
+
 
     onSubmitSignIn = () => {
       const { email, name, password } = this.state;
-  if (!email || !name || !password) {
-    alert('All fields must be filled out.');
-    return;
-  } else if (name.length < 3) {
-    alert('Name must be at least 3 characters long.');
-    return;
-  } else if (name.length > 20 || name.includes(' ') || name.includes('.') || name.includes(',') || name.includes('!') || name.includes('?') || name.includes('*') || name.includes('+') || name.includes('-') || name.includes('/') || name.includes('\\') || name.includes('|') || name.includes('(') || name.includes(')') || name.includes('{') || name.includes('}') || name.includes('[') || name.includes(']') || name.includes('<') || name.includes('>') || name.includes('=') || name.includes('~') || name.includes('`') || name.includes(';') || name.includes(':') || name.includes('\'') || name.includes('"')) {
-    alert('Name must not contain any special characters or spaces.');
-    return;
-  } else if (name.includes('0') || name.includes('1') || name.includes('2') || name.includes('3') || name.includes('4') || name.includes('5') || name.includes('6') || name.includes('7') || name.includes('8') || name.includes('9')) {
-    alert('Name must not contain any numbers.');
-    return;
-  } else if (email.length < 3) {
-    alert('Email must be at least 3 characters long.');
-    return;
-  } else if (email.length > 254) {
-    alert('Email must not exceed 254 characters.');
-    return;
-  } else if (email.includes(' ')) {
-    alert('Email must not contain any spaces.');
-    return;
-  } else if (email.includes('..')) {
-    alert('Email must not contain consecutive periods.');
-    return;
-  } else if (email.includes('@.')) {
-    alert('Email must not contain a period immediately after an @ symbol.');
-    return;
-  } else if (email.includes('.@')) {
-    alert('Email must not contain an @ symbol immediately after a period.');
-    return;
-  } 
-   else if (!email.includes('@')) {
-    alert('Email must contain an @ symbol.');
-    return;
-  } else if (password.length < 3) {
-    alert('Password must be at least 3 characters long.');
-    return;
-  } else if (password.length > 100) {
-    alert('Password must not exceed 100 characters.');
-    return;
-  }
+        if (!email || !name || !password) {
+          alert('All fields must be filled out.');
+          return;
+        }
 
-
+        this.setState({ isLoading: true });
       fetch('https://smart-brain-api-k158.onrender.com/register', {
         method: 'post',
         headers: {'Content-Type': 'application/json'},
@@ -82,8 +43,11 @@ class Register extends React.Component {
       .then(response => {
         if (response.ok) {
           return response.json();
+          // this.setState({ isLoading: false });
         } else {
+          this.setState({ isLoading: false });
           throw new Error('User with this email already exists');
+          
         }
       })
       .then(user => {
@@ -96,9 +60,15 @@ class Register extends React.Component {
     }
 
     render() {
-      const { recaptchaValue } = this.state;
    
     return (
+      <div>
+            {this.state.isLoading ? (
+              <div className="loader-container">
+              <div className="loader"></div>
+              </div>
+            ) : (
+
 
         <article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
       <main className="pa4 black-80">
@@ -115,6 +85,7 @@ class Register extends React.Component {
                 type="text"
                 name="name"
                 id="name"
+                required
               />
             </div>
             <div className="mt3">
@@ -127,6 +98,7 @@ class Register extends React.Component {
                 type="email"
                 name="email-address"
                 id="email-address"
+                required
               />
             </div>
             <div className="mv3">
@@ -139,14 +111,10 @@ class Register extends React.Component {
                 type="password"
                 name="password"
                 id="password"
+                required
               />
             </div>
           </fieldset>
-          <ReCAPTCHA
-                        sitekey="6LfCYUkpAAAAAMA8rMl2HWqkGKLPGsn1A37EcdpW" // Replace with your reCAPTCHA site key
-                        onChange={this.onRecaptchaChange}
-                    />
-                    {recaptchaValue && (
                         <div className="mt3">
                             <input
                                 onClick={this.onSubmitSignIn}
@@ -155,11 +123,12 @@ class Register extends React.Component {
                                 value="Register"
                             />
                         </div>
-                    )}
                 </div>
             </main>
       </article>
-    );
+    )};
+    </div>
+    )
   };
 }
   
